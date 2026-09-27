@@ -18,5 +18,6 @@ def create_task():
     title = data.get("title")
     if not title:
         return jsonify({"error": "Title is required"}), 400
-    tasks.append({"id": len(tasks)+1, "title": title, "completed":False})
-    return jsonify(tasks), 201
+    new_task = {"id": len(tasks)+1, "title": title, "completed":False}
+    tasks.append(new_task)
+    return jsonify(new_task), 201
