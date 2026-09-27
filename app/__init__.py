@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -11,3 +11,12 @@ tasks = [
 @app.route("/tasks")
 def get_tasks():
     return jsonify(tasks)
+
+@app.route("/tasks", methods=["POST"])
+def create_task():
+    data = request.get_json()
+    title = data.get("title")
+    if not title:
+        return jsonify({"error": "Title is required"}), 400
+    tasks.append({"id": len(tasks)+1, "title": title, "completed":False})
+    return jsonify(tasks), 201
