@@ -20,4 +20,8 @@ def create_task():
         return jsonify({"error": "Title is required"}), 400
     new_task = {"id": len(tasks)+1, "title": title, "completed":False}
     tasks.append(new_task)
+    send_notification(title)
     return jsonify(new_task), 201
+
+def send_notification(title):
+    print(f"Notificación enviada: {title}")
