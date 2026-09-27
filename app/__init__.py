@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
@@ -10,4 +10,4 @@ tasks = [
 
 @app.route("/tasks")
 def get_tasks():
-    return Flask.jsonify(tasks)
+    return jsonify(tasks)
