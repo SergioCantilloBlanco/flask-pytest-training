@@ -1,20 +1,23 @@
-import pytest
-from app import app
-import app as a
+import sys, os, pytest
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app.app import create_app
+from app import models
 
 @pytest.fixture
-def initial_tasks():
-    return[
-    {"id": 1, "title": "Aprender testing", "completed": False},
-    {"id": 2, "title": "Aprender aleman", "completed": False},]
+def test_client():
+    """Crea la aplicación Flask en modo testing y devuelve su cliente HTTP."""
+    app = create_app()
+    app.testing = True
+    return app.test_client()
 
-@pytest.fixture
-def reset_tasks(initial_tasks):
-    a.tasks = initial_tasks.copy()
-
-
-@pytest.fixture
-def client(reset_tasks):
-    client = app.test_client()
-
-    yield client
+@pytest.fixture(autouse=True)
+def reset_tasks():
+    """
+    Fixture autouse (se ejecuta antes de cada test).
+    Restablece el estado inicial de la lista de tareas.
+    """
+    models.tasks[:] = [
+        {'id': 1, 'title': 'Comprar pan', 'done': False},
+        {'id': 2, 'title': 'Estudiar Python', 'done': False}
+    ]
